@@ -1,44 +1,30 @@
 import React from "react";
+import './Quantity.css'
 
-export default function Todo() {
-  const [task, setTask] = React.useState([]);
-  const fetchData = async () => {
-    let res = await fetch("http://localhost:3000/posts");
-    let data = await res.json();
-    setTask(data);
-    // console.log(task);
-  };
+export default function Quantity({total, setTotal, amount}) {
+    let [count, setCount] = React.useState(0)
 
-  const addTask = async () => {
-    let newTask = document.getElementById("newTask").value;
-    let res = await fetch("http://localhost:3000/posts", {
-      method: "POST",
-      body: JSON.stringify({ task: newTask }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    let data = await res.json();
-    console.log(data);
-  };
-
-  const displayTasks = task.map((elem, index) => {
-    return (
-      <p key={index + 1}>
-        Task {index} is {elem.task}
-      </p>
-    );
-  });
+    const increaseCount = () => {
+      count++;
+        setCount(count);
+        // let temp = amount;
+        total+=amount
+        setTotal(total)
+      }
+      
+      const decreaseCount = () => {
+      count--;
+        setCount(count);
+        // let temp = amount;
+        total-=amount
+        setTotal(total)
+    }
 
   return (
-    <div>
-      <h1>Todo</h1>
-      <button onClick={fetchData}>GET TASKS</button>
-      <div>{displayTasks}</div>
-      <div>
-        <input id="newTask" type="text" placeholder="Add Something here" />
-        <button onClick={addTask}>Add Task</button>
-      </div>
+    <div className="quantity">
+      <button className="quantityChange" disabled={count<=0? true:false} style={count<=0? {color: "gray"}:{color:"red"}} onClick={decreaseCount}>-</button>
+      <p id="Count">{count}</p>
+      <button className="quantityChange" disabled={count>=20? true:false} style={count>=20? {color: "gray"}:{color:"red"}} onClick={increaseCount}>+</button>
     </div>
   );
 }
